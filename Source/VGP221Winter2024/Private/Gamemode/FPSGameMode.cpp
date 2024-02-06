@@ -13,4 +13,21 @@ void AFPSGameMode::StartPlay()
 	GEngine->AddOnScreenDebugMessage(-1, displayTime, textColor, FString::Printf(TEXT("Starting FPS Map")));
 
 	UE_LOG(LogTemp, Warning, TEXT("Starting FPS Map"));
+
+	ChangeMenuWidget(UserWidgetPrefab);
+}
+
+void AFPSGameMode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)
+{
+	if (CurrentWidget != nullptr)
+	{
+		CurrentWidget->RemoveFromParent();
+		CurrentWidget = nullptr;
+	}
+
+	if (NewWidgetClass != nullptr)
+	{
+		CurrentWidget = CreateWidget<UFPSUserWidget>(GetWorld(), NewWidgetClass);
+		CurrentWidget->AddToViewport();
+	}
 }

@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Projectiles/FPSProjectile.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameMode/FPSGameMode.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "GUI/FPSUserWidget.h"
 #include "FPSGameMode.generated.h"
 
 /**
@@ -17,7 +18,16 @@ class VGP221WINTER2024_API AFPSGameMode : public AGameModeBase
 public:
 	virtual void StartPlay() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GUI")
+	TSubclassOf<UFPSUserWidget> UserWidgetPrefab;
+
+	UFUNCTION(BlueprintCallable, Category = "GUI")
+	void ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass);
+
 private:
+	UPROPERTY()
+	UFPSUserWidget* CurrentWidget;
+
 	float displayTime = 5.0f;
 	FColor textColor = FColor::Red;
 };
