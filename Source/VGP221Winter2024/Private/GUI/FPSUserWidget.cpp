@@ -5,8 +5,8 @@
 
 void UFPSUserWidget::NativeConstruct()
 {
-	SetHealthBar(0.5f);
-	SetScore(5);
+	SetHealthBar(1.0f);
+	SetScore(0);
 
 	if (ButtonWidgetPrefab)
 	{

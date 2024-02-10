@@ -24,10 +24,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GUI")
 	void ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass);
 
-private:
 	UPROPERTY()
 	UFPSUserWidget* CurrentWidget;
 
+private:
 	float displayTime = 5.0f;
 	FColor textColor = FColor::Red;
 };
