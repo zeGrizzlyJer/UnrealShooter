@@ -13,6 +13,7 @@ ACollectible::ACollectible()
 		CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComponent"));
 		CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ACollectible::BeginOverlap);
 		CollisionComponent->InitSphereRadius(50.0f);
+		CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Collectible"));
 		RootComponent = CollisionComponent;
 	}
 
@@ -34,10 +35,19 @@ void ACollectible::Tick(float DeltaTime)
 
 void ACollectible::BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	OnCollect();
+	OnCollect(OtherActor);
 }
 
-void ACollectible::OnCollect()
+void ACollectible::OnCollect(AActor* OtherActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Collectible OnCollect Called"));
+
+	// Set collision presets to NoCollision
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	UGameplayStatics::PlaySound2D(this, Sound);
+
+	if (Interactable)
+	{
+		if (UAC_Interactable* AC_Component = Interactable->FindComponentByClass<UAC_Interactable>()) AC_Component->ActivateInteractable(this);
+	}
 }

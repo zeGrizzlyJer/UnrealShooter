@@ -23,7 +23,7 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void OnCollect() override;
+	virtual void OnCollect(AActor* OtherActor) override;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CoinMesh;

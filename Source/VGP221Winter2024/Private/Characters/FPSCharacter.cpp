@@ -38,6 +38,9 @@ AFPSCharacter::AFPSCharacter()
 
 	// The owning player doesn't see the regular (third-person) body mesh
 	GetMesh()->SetOwnerNoSee(true);
+
+	HealthComponent = CreateDefaultSubobject<UAC_HealthComponent>(TEXT("HealthComponent"));
+	UAC_Respawn* RespawnComponent = CreateDefaultSubobject<UAC_Respawn>(TEXT("RespawnComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -113,14 +116,14 @@ void AFPSCharacter::Fire()
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
 		// Set the MuzzleOffset to spawn projectiles slightly in front of the camera
-		MuzzleOffset.Set(100.0f, 0.0f, 0.0f);
+		//MuzzleOffset.Set(120.0f, 0.0f, 10.0f);
 
 		// Transform MuzzleOffset from camera space to world space
 		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
 
 		// Skew the aim to be slightly upwards
 		FRotator MuzzleRotation = CameraRotation;
-		MuzzleRotation.Pitch += 10.0f;
+		MuzzleRotation.Pitch += pitchSkew;
 
 		UWorld* World = GetWorld();
 		if (World)
@@ -139,4 +142,23 @@ void AFPSCharacter::Fire()
 			}
 		}
 	}
+}
+
+float AFPSCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	// Easy way to acccess the gamemode
+	AFPSGameMode* Gamemode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (Gamemode) {
+		HealthComponent->TakeDamage(DamageAmount);
+	}
+
+	return FinalDamage;
+}
+
+void AFPSCharacter::Die_Implementation()
+{
+	HealthComponent->SetHealth(HealthComponent->MaxHealth);
+	this->FindComponentByClass<UAC_Respawn>()->Respawn();
 }

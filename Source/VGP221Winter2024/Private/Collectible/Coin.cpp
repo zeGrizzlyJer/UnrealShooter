@@ -26,9 +26,9 @@ void ACoin::Tick(float DeltaTime)
 	AddActorLocalRotation(FRotator(0, RotationRate * DeltaTime, 0));
 }
 
-void ACoin::OnCollect()
+void ACoin::OnCollect(AActor* OtherActor)
 {
-	Super::OnCollect();
+	Super::OnCollect(OtherActor);
 
 	UE_LOG(LogTemp, Warning, TEXT("Coin OnCollect Called"));
 

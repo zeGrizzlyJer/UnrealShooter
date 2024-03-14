@@ -58,6 +58,7 @@ AFPSProjectile::AFPSProjectile()
 	}
 
 	InitialLifeSpan = 3.0f;
+	Damage = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -86,6 +87,11 @@ void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 	if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
 	{
 		OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+	}
+
+	if (OtherActor->CanBeDamaged())
+	{
+		OtherActor->TakeDamage(Damage, FDamageEvent(), UGameplayStatics::GetPlayerController(GetWorld(), 0), this);
 	}
 
 	Destroy();

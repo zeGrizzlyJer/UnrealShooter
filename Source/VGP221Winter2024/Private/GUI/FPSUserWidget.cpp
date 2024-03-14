@@ -5,7 +5,7 @@
 
 void UFPSUserWidget::NativeConstruct()
 {
-	SetHealthBar(1.0f);
+	SetHealthBar(100.0f, 100.0f);
 	SetScore(0);
 
 	if (ButtonWidgetPrefab)
@@ -21,11 +21,11 @@ void UFPSUserWidget::NativeConstruct()
 	}
 }
 
-void UFPSUserWidget::SetHealthBar(float percentage)
+void UFPSUserWidget::SetHealthBar(float CurrentHealth, float MaxHealth)
 {
 	if (!HealthBar) return;
 
-	HealthBar->SetPercent(percentage);
+	HealthBar->SetPercent(CurrentHealth / MaxHealth);
 }
 
 void UFPSUserWidget::SetScore(int newScore)
@@ -34,4 +34,9 @@ void UFPSUserWidget::SetScore(int newScore)
 
 	UIScore += newScore;
 	ScoreText->SetText(FText::FromString("Score: " + FString::FromInt(UIScore)));
+}
+
+int UFPSUserWidget::GetScore()
+{
+	return UIScore;
 }

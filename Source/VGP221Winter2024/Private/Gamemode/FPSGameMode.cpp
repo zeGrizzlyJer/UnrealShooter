@@ -29,5 +29,25 @@ void AFPSGameMode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)
 	{
 		CurrentWidget = CreateWidget<UFPSUserWidget>(GetWorld(), NewWidgetClass);
 		CurrentWidget->AddToViewport();
+
+		if (APawn* PlayerPawn = Cast<APawn>(GetWorld()->GetFirstPlayerController()->GetPawn()))
+		{
+			if (PlayerPawn)
+			{
+				UAC_HealthComponent* HealthComponent = PlayerPawn->FindComponentByClass<UAC_HealthComponent>();
+				if (HealthComponent)
+				{
+					FScriptDelegate HealthChangedDelegate;
+					HealthChangedDelegate.BindUFunction(CurrentWidget, FName("SetHealthBar"));
+
+					HealthComponent->OnHealthChanged.Add(HealthChangedDelegate);
+
+					if (GEngine)
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::White, "Delegated", false);
+					}
+				}
+			}
+		}
 	}
 }

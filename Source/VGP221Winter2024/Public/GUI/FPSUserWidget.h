@@ -34,10 +34,13 @@ public:
 	TSubclassOf<class UButtonWidget> ButtonWidgetPrefab;
 
 	UFUNCTION()
-	void SetHealthBar(float percentage);
+	void SetHealthBar(float CurrentHealth, float MaxHealth);
 
 	UFUNCTION()
 	void SetScore(int newScore);
+
+	UFUNCTION()
+	int GetScore();
 
 private:
 	int UIScore;

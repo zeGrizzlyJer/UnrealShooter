@@ -6,13 +6,16 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Gameplay/AC_Respawn.h"
+#include "Gameplay/IDie.h"
+#include "Gameplay/AC_HealthComponent.h"
 #include "Projectiles/FPSProjectile.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameMode/FPSGameMode.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
-class VGP221WINTER2024_API AFPSCharacter : public ACharacter
+class VGP221WINTER2024_API AFPSCharacter : public ACharacter, public IIDie
 {
 	GENERATED_BODY()
 
@@ -27,6 +30,8 @@ protected:
 	// Projectile class to spawn
 	UPROPERTY(EditAnywhere, Category = Projectile)
 	TSubclassOf<class AFPSProjectile> ProjectileClass;
+	UPROPERTY(EditAnywhere, Category = Projectile)
+	float pitchSkew = 10.0f;
 
 public:	
 	// Called every frame
@@ -55,6 +60,8 @@ public:
 	UFUNCTION()
 	void Fire();
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	// FPS Camera
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FPSCameraComponent;
@@ -63,12 +70,18 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* FPSMesh;
 
+	UPROPERTY(EditAnywhere, Category = Health)
+	UAC_HealthComponent* HealthComponent;
+
 	// Gun muzzle offset from the camera location
-	UPROPERTY(EditAnywhere, blueprintReadWrite, Category = Gameplay)
+	UPROPERTY(EditAnywhere, blueprintReadWrite, Category = Projectile)
 	FVector MuzzleOffset;
 
 protected:
 	// Params for debug log to screen
 	float displayTime = 5.0f;
 	FColor textColor = FColor::Cyan;
+
+public:
+	void Die_Implementation();
 };

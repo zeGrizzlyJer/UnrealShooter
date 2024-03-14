@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DamageEvents.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
+#include "Gameplay/AC_HealthComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "FPSProjectile.generated.h"
 
@@ -44,6 +47,9 @@ public:
 	// Projectile material
 	UPROPERTY(VisibleDefaultsOnly, Category = Movement)
 	UMaterialInstanceDynamic* ProjectileMaterialInstance;
+
+	UPROPERTY(EditAnywhere, Category = Projectile)
+	float Damage;
 
 	// Function that initializes the projectile's velocity
 	void FireInDirection(const FVector& ShootDirection);

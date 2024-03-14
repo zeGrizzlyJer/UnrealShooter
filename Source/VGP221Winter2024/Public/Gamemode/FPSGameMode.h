@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "Gameplay/AC_HealthComponent.h"
 #include "GUI/FPSUserWidget.h"
 #include "FPSGameMode.generated.h"
 
