@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AIController.h"
+#include "Projectiles/FPSProjectile.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Task_Shoot.generated.h"

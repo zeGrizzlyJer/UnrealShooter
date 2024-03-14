@@ -27,6 +27,7 @@ void AEnemyAIController::OnSeePawn(APawn* PlayerPawn)
 	if (!player) return;
 
 	SetCanSeePlayer(true, player);
+	RunTriggerableTimer();
 }
 
 void AEnemyAIController::SetCanSeePlayer(bool SeePlayer, UObject* Player)

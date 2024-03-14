@@ -10,12 +10,29 @@ void AWinzone::Interact_Implementation(AActor* OtherActor)
 	if (AFPSGameMode* Gamemode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		int currentScore = Gamemode->CurrentWidget->GetScore();
+		FString text = "Find More Coins";
 
-		FString text = (currentScore >= 12) ? "You Win" : "Find More Coins";
-
-		if (GEngine)
+		if (currentScore < 12)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, text);
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, text);
+			}
+		}
+		else
+		{
+			Gamemode->CurrentWidget->RemoveFromViewport();
+			UMenuWidget* CurrentWidget = CreateWidget<UMenuWidget>(GetWorld(), UserWidgetPrefab);
+			if (CurrentWidget)
+			{
+				CurrentWidget->SetWinScreen();
+				CurrentWidget->AddToViewport();
+				APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+
+				FInputModeUIOnly InputMode;
+				PlayerController->SetInputMode(InputMode);
+				PlayerController->bShowMouseCursor = true;
+			}
 		}
 	}
 }

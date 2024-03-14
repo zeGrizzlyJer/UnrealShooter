@@ -33,7 +33,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* CollisionComponent;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = Interactable)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interactable)
 	AActor* Interactable;
 
 	UFUNCTION()

@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Gameplay/AC_HealthComponent.h"
 #include "Gameplay/IDie.h"
 #include "GameFramework/Character.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "EnemyAICharacter.generated.h"
 
 UCLASS()
@@ -29,10 +31,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, Category = Turret)
+	float MaxRotationAngle = 30.0f;
+
 	UPROPERTY(EditAnywhere, Category = Health)
 	UAC_HealthComponent* HealthComponent;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	void Die_Implementation();
+
+private:
+	UStaticMeshComponent* TurretHead;
+	float RotationAngle = 0.0f;
+
+	UPROPERTY(EditAnywhere, Category = Turret)
+	float RotationSpeed = 15.0f;
+
+	bool GoingRight = true;
 };

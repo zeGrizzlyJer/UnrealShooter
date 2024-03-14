@@ -29,4 +29,6 @@ public:
 
 	UFUNCTION()
 	void OnButtonClick();
+
+	virtual void NativeConstruct() override;
 };

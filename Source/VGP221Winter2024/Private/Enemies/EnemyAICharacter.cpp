@@ -16,14 +16,67 @@ AEnemyAICharacter::AEnemyAICharacter()
 void AEnemyAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	TArray<UStaticMeshComponent*> MeshComponents;
+	GetComponents<UStaticMeshComponent>(MeshComponents);
+
+	for (UStaticMeshComponent* mesh : MeshComponents)
+	{
+		if (mesh->GetName() == "TurretHead")
+		{
+			TurretHead = mesh;
+
+			TArray<USceneComponent*> SceneComponents;
+			GetComponents<USceneComponent>(SceneComponents);
+
+			for (USceneComponent* scene : SceneComponents)
+			{
+				if (scene->GetName() == "ShootSpot")
+				{
+					if (AAIController* MyController = Cast<AAIController>(GetController()))
+					{
+						if (UBlackboardComponent* Blackboard = MyController->GetBlackboardComponent())
+						{
+							Blackboard->SetValueAsObject("Shoot Spot", scene);
+						}
+					}
+				}
+			}
+			break;
+		}
+	}
 }
 
 // Called every frame
 void AEnemyAICharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	if (!TurretHead) return;
 
+	if (AAIController* MyController = Cast<AAIController>(GetController()))
+	{
+		if (UBlackboardComponent* Blackboard = MyController->GetBlackboardComponent())
+		{
+			if (bool SeePlayer = !Blackboard->GetValueAsBool("Can See Player"))
+			{
+				float TargetRotation = MaxRotationAngle * (GoingRight ? 1 : -1);
+				RotationAngle = FMath::FInterpTo(RotationAngle, TargetRotation, DeltaTime, RotationSpeed);
+
+				TurretHead->SetRelativeRotation(FRotator(0.0f, RotationAngle, 0.0f));
+				if (FMath::IsNearlyEqual(RotationAngle, TargetRotation, 0.1f)) GoingRight = !GoingRight;
+			}
+			else
+			{
+				if (AActor* Target = Cast<AActor>(Blackboard->GetValueAsObject("Player Target")))
+				{
+					FVector Direction = (Target->GetActorLocation() - TurretHead->GetComponentLocation()).GetSafeNormal();
+						
+					FRotator TargetRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+
+					TurretHead->SetWorldRotation(TargetRotation);
+				}
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input

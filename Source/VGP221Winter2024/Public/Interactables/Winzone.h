@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Gamemode/FPSGameMode.h"
+#include "GUI/MenuWidget.h"
 #include "Interactables/Interactable.h"
 #include "Winzone.generated.h"
 
@@ -17,5 +18,8 @@ class VGP221WINTER2024_API AWinzone : public AInteractable
 
 public:
 	void Interact_Implementation(AActor* OtherActor) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
+	TSubclassOf<UMenuWidget> UserWidgetPrefab;
 
 };

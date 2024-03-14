@@ -7,11 +7,6 @@ void AFPSGameMode::StartPlay()
 {
 	Super::StartPlay();
 
-	check(GEngine != nullptr);
-	// Display a debug message for 5 seconds.
-	// The -1 "Key" value argument prevents the msg from being updated/refreshed.
-	GEngine->AddOnScreenDebugMessage(-1, displayTime, textColor, FString::Printf(TEXT("Starting FPS Map")));
-
 	UE_LOG(LogTemp, Warning, TEXT("Starting FPS Map"));
 
 	ChangeMenuWidget(UserWidgetPrefab);
@@ -41,11 +36,6 @@ void AFPSGameMode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)
 					HealthChangedDelegate.BindUFunction(CurrentWidget, FName("SetHealthBar"));
 
 					HealthComponent->OnHealthChanged.Add(HealthChangedDelegate);
-
-					if (GEngine)
-					{
-						GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::White, "Delegated", false);
-					}
 				}
 			}
 		}
