@@ -94,7 +94,7 @@ float AEnemyAICharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	if (GEngine)
 	{
 		FString text = "Enemy taking Damage";
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, text);
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, text);
 	}
 
 	return FinalDamage;
